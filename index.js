@@ -1,16 +1,25 @@
 const path = require('path');
 const fs = require('fs');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 
-const packageStr = fs.readFileSync(path.resolve(__dirname,'package.json'),{encoding: 'utf-8'});
+const { argv } = yargs(hideBin(process.argv))
+    .option('name', {
+        describe: 'CLI名を表示'
+    })
+    .option('file',{
+        describe: 'Markdownファイルのパス'
+    });
+console.log(argv);
+const packageStr = fs.readFileSync(path.resolve(__dirname,'package.json'),{
+    encoding: 'utf-8'});
 
 const package = JSON.parse(packageStr);
 
-//nameオプションのチェック
-const hasNameOption = process.argv.includes('--name');
-
-if(hasNameOption){
-    console.log(package.name)
-}
-else{
+if(argv.file){
+    console.log(argv.file);
+} else if(argv.name){
+    console.log(package.name);
+} else {
     console.log('No option')
 }
