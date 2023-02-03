@@ -10,16 +10,16 @@ const { argv } = yargs(hideBin(process.argv))
     .option('file',{
         describe: 'Markdownファイルのパス'
     });
-console.log(argv);
-const packageStr = fs.readFileSync(path.resolve(__dirname,'package.json'),{
-    encoding: 'utf-8'});
 
-const package = JSON.parse(packageStr);
+    if (argv.name){
+        const packageStr = fs.readFileSync(path.resolve(__dirname,'package.json'),{encoding: 'utf-8'});
+        const package = JSON.parse(packageStr);
+        console.log(package.name);
 
-if(argv.file){
-    console.log(argv.file);
-} else if(argv.name){
-    console.log(package.name);
-} else {
-    console.log('No option')
-}
+        //nameオプションが入っていた場合には他のオプションを使わないので正常終了
+        process.exit(0);
+    }
+
+//指定されたmarkdownファイルを読み込む
+const markdownStr = fs.readFileSync(path.resolve(__dirname,argv.file),{encoding: 'utf-8'});
+console.log(markdownStr);
