@@ -1,8 +1,9 @@
+const { marked } = require('marked');
 const path = require('path');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const { getPackageName } = require('./lib/name');
-const { readMarkdownFileSync } = require('./lib/file');
+const { readMarkdownFileSync, writeHtmlFileSync } = require('./lib/file');
 
 const { argv } = yargs(hideBin(process.argv))
     .option('name', {
@@ -10,6 +11,10 @@ const { argv } = yargs(hideBin(process.argv))
     })
     .option('file',{
         describe: 'Markdownファイルのパス'
+    })
+    .option('out',{
+        describe: 'html file',
+        default: 'article.html'
     });
 
     if (argv.name){
@@ -22,4 +27,6 @@ const { argv } = yargs(hideBin(process.argv))
 
 //指定されたmarkdownファイルを読み込む
 const markdownStr = readMarkdownFileSync(path.resolve(__dirname,argv.file));
-console.log(markdownStr);
+const html = marked(markdownStr);
+
+writeHtmlFileSync(__dirname, argv.out, html)
