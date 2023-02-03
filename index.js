@@ -26,7 +26,7 @@ const { argv } = yargs(hideBin(process.argv))
     }
 
 //指定されたmarkdownファイルを読み込む
-const markdownStr = readMarkdownFileSync(path.resolve(__dirname,argv.file));
+const markdownStr = readMarkdownFileSync(path.resolve(__dirname, argv.file));
 const html = marked(markdownStr);
 
-writeHtmlFileSync(__dirname, argv.out, html)
+writeHtmlFileSync(path.resolve(__dirname, argv.out), html)
